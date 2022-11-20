@@ -3,7 +3,7 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:16-bullseye",
 	"features": {
 		"ghcr.io/NicoVIII/devcontainer-features/pnpm:1": {}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
