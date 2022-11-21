@@ -11,6 +11,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^1.6.10"
+    "@astrojs/svelte": "^1.0.2",
+    "astro": "^1.6.10",
+    "pocketbase": "^0.8.0",
+    "svelte": "^3.46.4"
   }
 }

@@ -1,0 +1,1 @@
+<!-- Lietotāja avatars no datubāzes -->

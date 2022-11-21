@@ -1,0 +1,47 @@
+---
+import GameField from "../components/GameField.svelte";
+import Layout from "../layouts/Layout.astro";
+
+---
+
+<Layout title="Spēles laukums">
+  <h1>Vienkārši izkārojumi</h1>
+  <div>
+    <h2>3x3 tukšs spēles laukums</h2>
+    <GameField 
+      board={[[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]}
+      players={["X", "O"]}
+    />
+  </div>
+  <div>
+    <h2>3x3 spēles laukums ar X O X augšējā rindā</h2>
+    <GameField 
+      board={[[0,1,0],[-1,-1,-1],[-1,-1,-1]]}
+      players={["X", "O"]}
+    />
+  </div>
+  <div>
+    <h2>3x3 spēles laukums ar diognāliem X ( [\] &lt; šajā virzienā ) kā arī diviem O augšējā rindā</h2>
+    <GameField 
+      board={[[0,1,1],[-1,0,-1],[-1,-1,0]]}
+      players={["X", "O"]}
+    />
+  </div>
+  <div>
+    <h2>4x4 tukšs spēles laukums</h2>
+    <GameField 
+      board={[[-1,-1,-1,-1],[-1,-1,-1,-1],[-1,-1,-1,-1]]}
+      players={["X", "O"]}
+    />
+  </div>
+
+
+  <h1>Spēlētāju gājieni</h1>
+  <div>
+    <h2>3x3 spēles laukums ar X O X augšējā rindā, iet spēlētājs O</h2>
+    <GameField board={[[0,1,0],[-1,-1,-1],[-1,-1,-1]]} currentPlayer={1}/>
+  </div>
+
+
+  <h1>TODO: Tava kārta iet</h1>
+</Layout>
