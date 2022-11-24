@@ -6,17 +6,17 @@
     // [ [0, 0, 0], [0, 0, 0], [0, 0, 0,] ]
 </script>
 
-<div>
+<table>
 
   {#each board as row}
-    <div>
+    <tr>
       {#each row as field}
-       <div>
+       <td>
         {#if field != -1}
           {players[field]}
         {/if}
-       </div>
+     </td>
       {/each}
-    </div>
+    </tr>
   {/each}
-</div>
+  </table>
