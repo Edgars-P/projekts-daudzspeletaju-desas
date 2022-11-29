@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import DbConnectionExample from '../components/DbConnectionExample.svelte';
+import User from '../components/User.svelte';
 ---
 
 <Layout title="Sākumalapa">
@@ -14,6 +15,7 @@ import DbConnectionExample from '../components/DbConnectionExample.svelte';
 		<h2>Piemērs savienošanai ar datu bāzi:</h2>
 		<DbConnectionExample client:load />
 		<p>Pieejams: <code>/src/components/DbConnectionExample.svelte</code></p>
-
+		
+		<User client:only></User>
 	</main>
 </Layout>
