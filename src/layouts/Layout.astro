@@ -6,8 +6,7 @@ export interface Props {
 const { title } = Astro.props;
 ---
 
-<!-- HTML mainīt šeit, ieliec <slot/> tur kur vajag būt pašam lapas saturam -->
-<!DOCTYPE html>
+<!-- HTML mainīt šeit, ieliec <slot/> tur kur vajag būt pašam lapas saturam --><!DOCTYPE html>
 <html lang="en">
 	<nav class="nav">
 		<ul>
@@ -29,44 +28,44 @@ const { title } = Astro.props;
 	<body>
 		<slot />
 	</body>
+
+
+	<!-- CSS priekš layout daļas var likt šeit -->
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+			background-image: url(src/components/Desktop - 4.png);
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+
+		.nav {
+			display: grid;
+			align-items: center;
+			justify-content: space-between;
+			padding: 20px;
+			background-color: #ffffff99;
+			color: black;
+			border-radius: 25px;
+		}
+
+		.button {
+		}
+
+		nav ul li {
+			display: inline;
+			font-size: 30px;
+		}
+		nav ul li a {
+			font-size: 15px;
+			color: black;
+			text-decoration: none;
+		}
+	</style>
 </html>
-
-<!-- CSS priekš layout daļas var likt šeit -->
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
-
-body {
-font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
-background-image: url(src/components/Desktop - 4.png);
-background-repeat: no-repeat;
-background-size: cover;
-}
-
-.nav{
-display: flex;
-align-items: center;
-justify-content: space-between;
-padding: 20px;
-background-color: #D275C4;
-color: black;
-border-radius: 25px;
-}
-
-.button{
-
-}
-
-nav ul li {
-display: inline;
-font-size: 30px;
-}
-nav ul li a{
-font-size: 15px;
-color:black;
-text-decoration: none;
-}
-</style>
