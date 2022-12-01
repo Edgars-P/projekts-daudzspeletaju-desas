@@ -2,21 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import DbConnectionExample from '../components/DbConnectionExample.svelte';
 import User from '../components/User.svelte';
+import GameField from '../components/GameField.svelte';
+import NewGame from '../components/newGame.svelte';
 ---
 
 <Layout title="Sākumalapa">
 
 	<main>
-		<h1></h1>
-		
-		<br>
-		<br>
-		<br>
-
-		<h2></h2>
-		<DbConnectionExample client:load />
-		<p>Pieejams: <code>/src/components/DbConnectionExample.svelte</code></p>
-		
-		<User client:only></User>
+		<div class="field">
+			<NewGame />
+		</div>
 	</main>
 </Layout>
