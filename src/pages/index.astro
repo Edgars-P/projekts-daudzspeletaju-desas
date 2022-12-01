@@ -2,6 +2,9 @@
 import Layout from '../layouts/Layout.astro';
 import DbConnectionExample from '../components/DbConnectionExample.svelte';
 import LoginPrompt from '../components/LoginPrompt.svelte';
+import User from '../components/User.svelte';
+import GameField from '../components/GameField.svelte';
+import NewGame from '../components/newGame.svelte';
 ---
 
 <Layout title="Sākumalapa">
@@ -23,5 +26,8 @@ import LoginPrompt from '../components/LoginPrompt.svelte';
 
 
 <LoginPrompt></LoginPrompt>
+		<div class="field">
+			<NewGame />
+		</div>
 	</main>
 </Layout>
