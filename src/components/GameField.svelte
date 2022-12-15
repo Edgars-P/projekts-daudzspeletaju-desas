@@ -26,7 +26,7 @@
   }
 
   td {
-    background: #ffffff99;
+    background: #ffffff99; 
     width: 5rem;
     height: 5rem;
     border-radius: 1rem;

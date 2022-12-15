@@ -1,6 +1,6 @@
 <script>
     import GameField from "./GameField.svelte";
-
+ 
 </script>
 
 
