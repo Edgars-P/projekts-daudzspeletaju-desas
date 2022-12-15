@@ -24,7 +24,7 @@
   table {
     border-spacing: 0.5rem;
   }
-
+ 
   td {
     background: #ffffff99; 
     width: 5rem;
