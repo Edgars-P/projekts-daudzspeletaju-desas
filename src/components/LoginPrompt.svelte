@@ -1,6 +1,6 @@
 <div>
     <form>
-        <label for="user">User:</label><br>
+        <label for="username">Username:</label><br>
         <input type="text" id="user" name="user"><br>
         <label for="pwd">Password:</label><br>
         <input type="password" id="pwd" name="pwd"><br>
