@@ -8,7 +8,7 @@
   <GameField board={[[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]} players={["X", "O"]}/>
   <label for="players">
     <span>Spēlētāji:</span>
-    <input type="number" id="players">
+    <input type="number" id="players" value="2">
   </label>
   <button>Uzaicināt!</button>
 </div>
@@ -40,6 +40,8 @@
     padding: 0;
     border: none;
     background: #ffffffcc;
+    text-align: center;
+    font-size: 1.3rem;
   }
   button {
     background: #ffffffcc;

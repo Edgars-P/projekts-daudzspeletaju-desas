@@ -47,3 +47,8 @@ export async function login(lietotajvards: string, parole: string) {
   userId.set(pb.authStore.model?.id)
 
 }
+
+export function logout() {
+  pb.authStore.clear();
+  userId.set(undefined)
+}

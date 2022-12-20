@@ -1,5 +1,5 @@
 <script>
-  import {userId, pb} from "../scripts/database"
+  import {userId, pb, logout} from "../scripts/database"
 
   async function loadAuth(iuserId) {
     if (iuserId === undefined) {
@@ -12,10 +12,12 @@
 </script>
 
 {#await loadAuth($userId)}
-  <li>Ielādē...</li>
+  <li><a href="#">Ielādē...</a></li>
 {:then username} 
   {#if !username}
     <li><a href="/login">Ienākt vai Reģistrēties</a></li>
+  {:else}
+    <li><a href="#">{username}</a></li>
+    <li><a href="#" on:click={logout}><i class="bi bi-box-arrow-left"></i></a></li>
   {/if}
-  <li><a href="#">{username}</a></li>
 {/await}
