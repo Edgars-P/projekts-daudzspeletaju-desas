@@ -27,6 +27,8 @@ export async function register(lietotajvards: string, epasts: string, parole: st
     authError.set(err.message)
   });
 
+  processingLogin.set(false)
+
 }
 
 export async function login(lietotajvards: string, parole: string) {
@@ -41,6 +43,7 @@ export async function login(lietotajvards: string, parole: string) {
     authError.set(err.message)
   });
 
+  processingLogin.set(false)
   userId.set(pb.authStore.model?.id)
 
 }
