@@ -1,9 +1,24 @@
+<script>
+
+    function pierakstities() {
+
+    }
+
+</script>
+
+
 <div>
-    <form>
-        <label for="user">User:</label><br>
-        <input type="text" id="user" name="user"><br>
-        <label for="pwd">Password:</label><br>
-        <input type="password" id="pwd" name="pwd"><br>
-        <input type="submit" value="Submit">
+    <form on:submit={pierakstities}>
+        <label for="user">
+            Lietotājvārds:
+            <input type="text" id="user" name="user"><br>
+        </label>
+        <label for="pwd">
+            Parole:
+            <input type="password" id="pwd" name="pwd"><br>
+        </label>
+        
+        <input type="submit" value="Pierakstīties">
+        <button>Reģistrēties</button>
     </form>
 </div>
