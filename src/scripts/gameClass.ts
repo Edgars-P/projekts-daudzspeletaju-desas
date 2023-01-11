@@ -4,13 +4,12 @@ export default class TicTacToe {
   private players: string[];
   private currentPlayer: number;
   private pb: any;
-  private recordId: string;
+  public recordId: string;
 
   constructor(
     boardSize: number,
     players: string[],
     pb: any,
-    recordId: string | null,
   ) {
     this.boardSize = boardSize;
     this.board = Array(boardSize)
@@ -20,21 +19,20 @@ export default class TicTacToe {
     this.currentPlayer = 0;
     this.pb = pb;
 
-    if (recordId === null) {
+  }
+
+  public async loadId(id: string | null) {
+    if (id === null) {
       const data = {
-        "laukums": "JSON",
+        "laukums": this.board,
         "aktivais_speletajs": "test",
         "lideris": "test",
       };
-
-      const record = await pb.collection("spele").create(data);
+      const record = await this.pb.collection("spele").create(data); 
+      id=record.id
     }
-
-    this.recordId = recordId;
-
+    this.recordId = id|| ""
   }
-
-  public async loadId()
 
   public async play(row: number, col: number): Promise<boolean> {
     if (

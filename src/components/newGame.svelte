@@ -1,10 +1,13 @@
 <script>
-    import { userId } from "../scripts/database";
+    import { pb, userId } from "../scripts/database";
+    import TicTacToe from "../scripts/gameClass";
     import GameField from "./GameField.svelte";
 
 
     async function createGameAndRedirect() {
-      
+      const game=new TicTacToe(3,["x"],pb)
+      await game.loadId(null)
+      location.href = "/game#" + game.recordId
     }
  
 </script>
@@ -12,8 +15,8 @@
 
 <div class="wrap">
   <GameField board={[[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]} players={["X", "O"]}/>
-  {#if $userId}
-    <button>Uzaicināt!</button>
+  {#if $userId !== undefined}
+    <button on:click={createGameAndRedirect}>Uzaicināt!</button>
   {:else}
     <button>Lūdzu reģistrēties vai pierakstīties!</button>
   {/if}
