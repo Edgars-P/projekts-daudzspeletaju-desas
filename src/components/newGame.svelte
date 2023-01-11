@@ -1,16 +1,22 @@
 <script>
+    import { userId } from "../scripts/database";
     import GameField from "./GameField.svelte";
+
+
+    async function createGameAndRedirect() {
+      
+    }
  
 </script>
 
 
 <div class="wrap">
   <GameField board={[[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]} players={["X", "O"]}/>
-  <label for="players">
-    <span>Spēlētāji:</span>
-    <input type="number" id="players" value="2">
-  </label>
-  <button>Uzaicināt!</button>
+  {#if $userId}
+    <button>Uzaicināt!</button>
+  {:else}
+    <button>Lūdzu reģistrēties vai pierakstīties!</button>
+  {/if}
 </div>
 
 <style>

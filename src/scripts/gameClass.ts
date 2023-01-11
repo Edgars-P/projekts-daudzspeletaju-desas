@@ -6,16 +6,35 @@ export default class TicTacToe {
   private pb: any;
   private recordId: string;
 
-  constructor(boardSize: number, players: string[], pb: any, recordId: string) {
+  constructor(
+    boardSize: number,
+    players: string[],
+    pb: any,
+    recordId: string | null,
+  ) {
     this.boardSize = boardSize;
     this.board = Array(boardSize)
       .fill(null)
-      .map(() => Array(boardSize).fill(' '));
+      .map(() => Array(boardSize).fill(" "));
     this.players = players;
     this.currentPlayer = 0;
     this.pb = pb;
+
+    if (recordId === null) {
+      const data = {
+        "laukums": "JSON",
+        "aktivais_speletajs": "test",
+        "lideris": "test",
+      };
+
+      const record = await pb.collection("spele").create(data);
+    }
+
     this.recordId = recordId;
+
   }
+
+  public async loadId()
 
   public async play(row: number, col: number): Promise<boolean> {
     if (
@@ -23,7 +42,7 @@ export default class TicTacToe {
       row >= this.boardSize ||
       col < 0 ||
       col >= this.boardSize ||
-      this.board[row][col] !== ' '
+      this.board[row][col] !== " "
     ) {
       return false;
     }
@@ -32,7 +51,7 @@ export default class TicTacToe {
 
     // Update the game field in the database
     const data = { laukums: this.board };
-    await this.pb.collection('spele').update(this.recordId, data);
+    await this.pb.collection("spele").update(this.recordId, data);
 
     return true;
   }
