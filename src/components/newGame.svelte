@@ -6,7 +6,7 @@
 
     async function createGameAndRedirect() {
       const game=new TicTacToe(3,["x"],pb)
-      await game.loadId(null)
+      await game.joinGame(null)
       location.href = "/game#" + game.recordId
     }
  

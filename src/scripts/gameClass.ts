@@ -1,10 +1,14 @@
+import { get, writable } from "svelte/store";
+import { userId } from "./database";
+
 export default class TicTacToe {
   private boardSize: number;
-  private board: string[][];
-  private players: string[];
-  private currentPlayer: number;
   private pb: any;
-  public recordId: string;
+  public currentPlayer = writable<number>();
+  public playerLables = writable<string[]>([]);
+  public board = writable<number[][]>([]);
+  public recordId: string | undefined = undefined;
+  public gamerId: string | undefined = undefined;
 
   constructor(
     boardSize: number,
@@ -12,26 +16,64 @@ export default class TicTacToe {
     pb: any,
   ) {
     this.boardSize = boardSize;
-    this.board = Array(boardSize)
-      .fill(null)
-      .map(() => Array(boardSize).fill(" "));
-    this.players = players;
-    this.currentPlayer = 0;
+    this.board.set(
+      Array(boardSize)
+        .fill(null)
+        .map(() => Array(boardSize).fill(-1)),
+    );
+    this.playerLables.set(players);
+    this.currentPlayer.set(0);
     this.pb = pb;
-
   }
 
-  public async loadId(id: string | null) {
-    if (id === null) {
+  public async joinGame(spelesID: string | null) {
+    if (spelesID === null) {
       const data = {
-        "laukums": this.board,
-        "aktivais_speletajs": "test",
-        "lideris": "test",
+        "laukums": get(this.board),
+        "aktivais_speletajs": undefined,
+        "lideris": get(userId),
       };
-      const record = await this.pb.collection("spele").create(data); 
-      id=record.id
+      const gameRecord = await this.pb.collection("spele").create(data);
+
+      spelesID = gameRecord.id;
     }
-    this.recordId = id|| ""
+
+    // Pārbauda vai jau nav pieteicies šai spēlei
+    var speletajsID;
+    try {
+      speletajsID =
+        (await this.pb.collection("speletaji").getFirstListItem(
+          `user="${get(userId)}" && game="${spelesID}"`,
+        )).id;
+    } catch (error) {
+      const gamerRecord = await this.pb.collection("speletaji").create({
+        "user": get(userId),
+        "game": spelesID,
+        "npk": 123,
+      });
+
+      speletajsID = gamerRecord.id;
+    }
+
+    // Ienāk spēlē
+    await this.pb.collection("spele").update(spelesID, {
+      "aktivais_speletajs": speletajsID,
+    });
+
+    this.gamerId = speletajsID;
+    this.recordId = spelesID || "";
+
+    const currentGameState = await this.pb.collection('spele').getOne(spelesID)
+
+    console.log(currentGameState);
+    
+
+    this.board.set(currentGameState.laukums)
+
+    // Sinhronizē izmaiņas
+    this.board.subscribe(value => {
+      this.pb.collection('spele').update(this.recordId, {laukums: JSON.stringify(value)});
+    })
   }
 
   public async play(row: number, col: number): Promise<boolean> {
@@ -40,16 +82,16 @@ export default class TicTacToe {
       row >= this.boardSize ||
       col < 0 ||
       col >= this.boardSize ||
-      this.board[row][col] !== " "
+      get(this.board)[row][col] !== -1
     ) {
       return false;
     }
-    this.board[row][col] = this.players[this.currentPlayer];
-    this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
 
-    // Update the game field in the database
-    const data = { laukums: this.board };
-    await this.pb.collection("spele").update(this.recordId, data);
+    let newBoard = get(this.board)
+    newBoard[row][col] = get(this.currentPlayer)
+    this.board.set(newBoard)
+
+    this.currentPlayer.update(prev => (prev + 1) % get(this.playerLables).length);
 
     return true;
   }
