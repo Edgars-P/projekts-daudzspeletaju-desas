@@ -82,6 +82,7 @@ export default class TicTacToe {
 
     // Ienāk spēlē
     this.myPlayerSymbol.set(this.playerLabels.indexOf(speletajsRecord.simbols));
+    await this.updatePlayers()
     //await this.pb.collection("spele").update(spelesID, {
     //  "aktivais_speletajs": speletajsID,
     //});
@@ -111,14 +112,7 @@ export default class TicTacToe {
 
     // Sinhronizē spēlētāju sarakstu
     this.pb.collection("speletaji").subscribe("*", async (e: any) => {
-      this.players.set(
-        (await this.pb.collection("speletaji").getList(1, 50, {
-          filter: `game="${spelesID}"`,
-          expand: "user"
-        })).items,
-      );
-
-      console.log(get(this.players));
+      await this.updatePlayers()
     });
   }
 

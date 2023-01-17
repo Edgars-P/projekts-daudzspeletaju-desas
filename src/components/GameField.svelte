@@ -30,7 +30,7 @@
   }
  
   td {
-    background: #ffffff99; 
+    background: #ffffff88; 
     width: 5rem;
     height: 5rem;
     border-radius: 1rem;
@@ -48,6 +48,7 @@
   td.empty {
     border-radius: 0.5rem;
     cursor: pointer;
+    background: #ffffffaa; 
   }
 
   td.empty:hover {
