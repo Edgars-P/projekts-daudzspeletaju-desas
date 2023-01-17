@@ -30,6 +30,6 @@
 
 <button on:click={() => $game.play(0, 0)}>Test</button>
 
-<GameField board={$board} currentPlayer={"O"} players={["X", "O"]}>
+<GameField board={$board} players={["X", "O"]} playFunction={(r,c)=>$game.play(r,c)}>
 
 </GameField>

@@ -4,8 +4,7 @@ import { userId } from "./database";
 export default class TicTacToe {
   private boardSize: number;
   private pb: any;
-  public currentPlayer = writable<number>();
-  public playerLables = writable<string[]>([]);
+  public currentPlayingPlayer = writable<number>();
   public board = writable<number[][]>([]);
   public recordId: string | undefined = undefined;
   public gamerId: string | undefined = undefined;
@@ -22,7 +21,7 @@ export default class TicTacToe {
         .map(() => Array(boardSize).fill(-1)),
     );
     this.playerLables.set(players);
-    this.currentPlayer.set(0);
+    this.currentPlayingPlayer.set(0);
     this.pb = pb;
   }
 
@@ -46,19 +45,28 @@ export default class TicTacToe {
           `user="${get(userId)}" && game="${spelesID}"`,
         )).id;
     } catch (error) {
+
+      // Pārbauda brīvu simbolu
+      const takenSymbols: string[] = await this.pb.collection("speletaji").getList(1, 50, {
+        filter: `game="${spelesID}"`,
+      }).map((x: Record<string, string>) => x.simbols)
+
+      const avalibleSymbols = ["X", "O", "Y", "Z", "M"].filter(x => takenSymbols.includes(x))
+
       const gamerRecord = await this.pb.collection("speletaji").create({
         "user": get(userId),
         "game": spelesID,
-        "npk": 123,
+        "npk": Math.floor(Math.random() * 10000),
+        "simbols": avalibleSymbols.at(0)
       });
 
       speletajsID = gamerRecord.id;
     }
 
     // Ienāk spēlē
-    await this.pb.collection("spele").update(spelesID, {
-      "aktivais_speletajs": speletajsID,
-    });
+    //await this.pb.collection("spele").update(spelesID, {
+    //  "aktivais_speletajs": speletajsID,
+    //});
 
     this.gamerId = speletajsID;
     this.recordId = spelesID || "";
@@ -88,10 +96,10 @@ export default class TicTacToe {
     }
 
     let newBoard = get(this.board)
-    newBoard[row][col] = get(this.currentPlayer)
+    newBoard[row][col] = get(this.currentPlayingPlayer)
     this.board.set(newBoard)
 
-    this.currentPlayer.update(prev => (prev + 1) % get(this.playerLables).length);
+    this.currentPlayingPlayer.update(prev => (prev + 1) % get(this.playerLables).length);
 
     return true;
   }
