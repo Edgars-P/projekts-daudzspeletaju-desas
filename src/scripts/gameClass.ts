@@ -1,10 +1,21 @@
 import { get, writable } from "svelte/store";
 import { userId } from "./database";
 
+interface Player {
+  user: string;
+  game: string;
+  npk: number;
+  simbols: string;
+}
+
 export default class TicTacToe {
   private boardSize: number;
   private pb: any;
+  private updateServer = false;
+  public playerLabels = ["X", "O", "Y", "Z", "M"];
+  public players = writable<Player[]>([]);
   public currentPlayingPlayer = writable<number>();
+  public myPlayerSymbol = writable<number>(0);
   public board = writable<number[][]>([]);
   public recordId: string | undefined = undefined;
   public gamerId: string | undefined = undefined;
@@ -20,7 +31,6 @@ export default class TicTacToe {
         .fill(null)
         .map(() => Array(boardSize).fill(-1)),
     );
-    this.playerLables.set(players);
     this.currentPlayingPlayer.set(0);
     this.pb = pb;
   }
@@ -37,51 +47,85 @@ export default class TicTacToe {
       spelesID = gameRecord.id;
     }
 
-    // Pārbauda vai jau nav pieteicies šai spēlei
-    var speletajsID;
-    try {
-      speletajsID =
-        (await this.pb.collection("speletaji").getFirstListItem(
-          `user="${get(userId)}" && game="${spelesID}"`,
-        )).id;
-    } catch (error) {
-
-      // Pārbauda brīvu simbolu
-      const takenSymbols: string[] = await this.pb.collection("speletaji").getList(1, 50, {
+    // Dabu spēlē esošos spēlētājus
+    this.players.set(
+      (await this.pb.collection("speletaji").getList(1, 50, {
         filter: `game="${spelesID}"`,
-      }).map((x: Record<string, string>) => x.simbols)
+        expand: "user"
+      })).items,
+    );
 
-      const avalibleSymbols = ["X", "O", "Y", "Z", "M"].filter(x => takenSymbols.includes(x))
+    console.log(get(this.players));
+    
+
+    // Pārbauda vai jau nav pieteicies šai spēlei
+    var speletajsRecord;
+    try {
+      speletajsRecord = (await this.pb.collection("speletaji").getFirstListItem(
+        `user="${get(userId)}" && game="${spelesID}"`,
+      ));
+    } catch (error) {
+      console.log(get(this.players));
+
+      const takenSymbols: string[] = get(this.players).map((x) => x.simbols);
+
+      const avalibleSymbols = this.playerLabels.filter((x) =>
+        !takenSymbols.includes(x)
+      );
+
+      const currentPlayerSymbol = avalibleSymbols[0];
 
       const gamerRecord = await this.pb.collection("speletaji").create({
         "user": get(userId),
         "game": spelesID,
         "npk": Math.floor(Math.random() * 10000),
-        "simbols": avalibleSymbols.at(0)
+        "simbols": currentPlayerSymbol,
       });
 
-      speletajsID = gamerRecord.id;
+      speletajsRecord = gamerRecord;
     }
 
     // Ienāk spēlē
+    this.myPlayerSymbol.set(this.playerLabels.indexOf(speletajsRecord.simbols));
     //await this.pb.collection("spele").update(spelesID, {
     //  "aktivais_speletajs": speletajsID,
     //});
 
-    this.gamerId = speletajsID;
+    this.gamerId = speletajsRecord.id;
     this.recordId = spelesID || "";
 
-    const currentGameState = await this.pb.collection('spele').getOne(spelesID)
+    const currentGameState = await this.pb.collection("spele").getOne(spelesID);
 
     console.log(currentGameState);
-    
 
-    this.board.set(currentGameState.laukums)
+    this.board.set(currentGameState.laukums);
 
-    // Sinhronizē izmaiņas
-    this.board.subscribe(value => {
-      this.pb.collection('spele').update(this.recordId, {laukums: JSON.stringify(value)});
-    })
+    // Sinhronizē izmaiņas spēles laukumā
+    this.board.subscribe((value) => {
+      // Citādi bezgalīgs cikls
+      if (!this.updateServer) return;
+      this.updateServer = false;
+      this.pb.collection("spele").update(this.recordId, {
+        laukums: JSON.stringify(value),
+        aktivais_speletajs: get(this.currentPlayingPlayer),
+      });
+    });
+    this.pb.collection("spele").subscribe(this.recordId, (e: any) => {
+      this.board.set(e.record.laukums);
+      this.currentPlayingPlayer.set(e.record.aktivais_speletajs);
+    });
+
+    // Sinhronizē spēlētāju sarakstu
+    this.pb.collection("speletaji").subscribe("*", async (e: any) => {
+      this.players.set(
+        (await this.pb.collection("speletaji").getList(1, 50, {
+          filter: `game="${spelesID}"`,
+          expand: "user"
+        })).items,
+      );
+
+      console.log(get(this.players));
+    });
   }
 
   public async play(row: number, col: number): Promise<boolean> {
@@ -95,11 +139,19 @@ export default class TicTacToe {
       return false;
     }
 
-    let newBoard = get(this.board)
-    newBoard[row][col] = get(this.currentPlayingPlayer)
-    this.board.set(newBoard)
+    if (get(this.currentPlayingPlayer) !== get(this.myPlayerSymbol)) {
+      return false
+    }
 
-    this.currentPlayingPlayer.update(prev => (prev + 1) % get(this.playerLables).length);
+    let newBoard = get(this.board);
+    newBoard[row][col] = get(this.currentPlayingPlayer);
+
+    this.currentPlayingPlayer.update((prev) =>
+      (prev + 1) % get(this.players).length
+    );
+
+    this.updateServer = true;
+    this.board.set(newBoard);
 
     return true;
   }

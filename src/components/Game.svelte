@@ -5,31 +5,34 @@
     import { onMount } from "svelte";
     import { writable } from "svelte/store";
 
-    const gameField = writable({
-        "laukums": [[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]],
-        "aktivais_speletajs": "RELATION_RECORD_ID",
-        "lideris": "RELATION_RECORD_ID"
-    })
+    const game = new Game(3, [], pb) 
+    let show = false
 
-    let game = writable(new Game(0,[],null))
-
-    let {board} = $game
+    let {currentPlayingPlayer, players, board, myPlayerSymbol} = game
 
     onMount(async () => {
-        const gameRecord = await pb.collection('spele').getOne(location.hash.substring(1));
+        await game.joinGame(location.hash.substring(1))
+        show = true
 
-        $game = new Game(gameRecord.laukums.length, ["X", "O", "Y"], pb) 
-        $game.joinGame(location.hash.substring(1))
-
-        board = $game.board
+        // Pārlādēt lapu ja nomainās spēles ID
+        window.addEventListener("hashchange", ()=>location.reload())
     })
 </script>
 
-<h2>Līderis: {$gameField.lideris}</h2>
-<h2>Spēlē: {$gameField.aktivais_speletajs}</h2>
+{#if show}
+    
+    <h2>Tu esi: {game.playerLabels[$myPlayerSymbol]}</h2>
 
-<button on:click={() => $game.play(0, 0)}>Test</button>
+    <h2>Šobrīd spēlē: {game.playerLabels[$currentPlayingPlayer]}</h2>
 
-<GameField board={$board} players={["X", "O"]} playFunction={(r,c)=>$game.play(r,c)}>
+    <ul>
+        <h2>Spēlētāji:</h2>
+        {#each $players as player}
+            <li>{player.expand?.user?.username}</li>
+        {/each}
+    </ul>
 
-</GameField>
+    <GameField board={$board} players={["X", "O"]} playFunction={(r,c)=>game.play(r,c)}>
+
+    </GameField>
+{/if}
