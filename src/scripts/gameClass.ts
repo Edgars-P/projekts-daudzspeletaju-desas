@@ -1,4 +1,5 @@
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
+import { checkWin } from "./checkWin";
 import { userId } from "./database";
 
 interface Player {
@@ -19,6 +20,7 @@ export default class TicTacToe {
   public board = writable<number[][]>([]);
   public recordId: string | undefined = undefined;
   public gamerId: string | undefined = undefined;
+  public isWon = derived([this.board], (b) => checkWin(b[0]))
 
   constructor(
     boardSize: number,
@@ -47,16 +49,10 @@ export default class TicTacToe {
       spelesID = gameRecord.id;
     }
 
-    // Dabu spēlē esošos spēlētājus
-    this.players.set(
-      (await this.pb.collection("speletaji").getList(1, 50, {
-        filter: `game="${spelesID}"`,
-        expand: "user"
-      })).items,
-    );
-
-    console.log(get(this.players));
     
+    // Dabu spēlē esošos spēlētājus
+    this.recordId = spelesID || "";
+    await this.updatePlayers()
 
     // Pārbauda vai jau nav pieteicies šai spēlei
     var speletajsRecord;
@@ -65,7 +61,6 @@ export default class TicTacToe {
         `user="${get(userId)}" && game="${spelesID}"`,
       ));
     } catch (error) {
-      console.log(get(this.players));
 
       const takenSymbols: string[] = get(this.players).map((x) => x.simbols);
 
@@ -92,7 +87,6 @@ export default class TicTacToe {
     //});
 
     this.gamerId = speletajsRecord.id;
-    this.recordId = spelesID || "";
 
     const currentGameState = await this.pb.collection("spele").getOne(spelesID);
 
@@ -143,6 +137,11 @@ export default class TicTacToe {
       return false
     }
 
+    // Neatļaut gājienus ja ir uzvara
+    if(get(this.isWon) !== false) {
+      return false
+    }
+
     let newBoard = get(this.board);
     newBoard[row][col] = get(this.currentPlayingPlayer);
 
@@ -156,11 +155,16 @@ export default class TicTacToe {
     return true;
   }
 
-  public checkWin(player: string): boolean {
-    return checkIfWon(this.board, player);
-  }
-
   public log(): void {
     console.log(this.board);
+  }
+
+  private async updatePlayers() {
+    this.players.set(
+      (await this.pb.collection("speletaji").getList(1, 50, {
+        filter: `game="${this.recordId}"`,
+        expand: "user"
+      })).items,
+    );
   }
 }
