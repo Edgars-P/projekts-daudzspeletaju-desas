@@ -23,6 +23,7 @@ export function checkWin(board: number[][]) {
   ];
 
 
+  let isDraw = true
   for (const winCondition of allWinSquares) {
     let winningPlayer = -1
     let winningPlayerCount = 0
@@ -38,6 +39,8 @@ export function checkWin(board: number[][]) {
           winningPlayer = currentPlayerInPos
         }
         winningPlayerCount++
+      } else {
+        isDraw = false
       }
       
       if (winningPlayerCount >= 3) {
@@ -48,6 +51,10 @@ export function checkWin(board: number[][]) {
 
     winningPlayer = -1
     winningPlayerCount = 0
+  }
+
+  if (isDraw) {
+    return -1
   }
 
   return false

@@ -23,15 +23,19 @@
     {#if show && ($players.length > 1 || $isWon !== false)}
         {#if $isWon !== false}
             <div class="section win">
-                <h1>
-                    {game.playerLabels[parseInt($isWon.toString())]} ir uzvarējis!
-                </h1>
+                {#if $isWon === -1}
+                    <h1>Neizšķirts!</h1>
+                {:else}
+                    <h1>
+                        {game.playerLabels[parseInt($isWon.toString())]} ir uzvarējis!
+                    </h1>
+                {/if}
             </div>
         {/if}
 
         <GameField
             board={$board}
-            players={["X", "O"]}
+            players={game.playerLabels}
             playFunction={(r, c) => game.play(r, c)}
             enableEmptyEffect={
                 $myPlayerSymbol == $currentPlayingPlayer

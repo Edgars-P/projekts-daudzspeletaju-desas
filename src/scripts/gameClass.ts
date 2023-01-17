@@ -7,6 +7,7 @@ interface Player {
   game: string;
   npk: number;
   simbols: string;
+  expand: Record<string, any>
 }
 
 export default class TicTacToe {
