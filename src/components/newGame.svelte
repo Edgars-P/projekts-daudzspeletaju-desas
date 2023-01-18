@@ -3,6 +3,8 @@
     import TicTacToe from "../scripts/gameClass";
     import GameField from "./GameField.svelte";
 
+    let joinId = ""
+
 
     async function createGameAndRedirect() {
       const game=new TicTacToe(3,["x"],pb)
@@ -16,7 +18,14 @@
 <div class="wrap">
   <GameField board={[[-1,-1,-1],[-1,-1,-1],[-1,-1,-1]]} players={["X", "O"]}/>
   {#if $userId !== undefined}
-    <button on:click={createGameAndRedirect}>Uzaicināt!</button>
+    <button on:click={createGameAndRedirect}>Jauna spēle</button>
+
+    <div class="join">
+      <input type="text" bind:value={joinId} placeholder="Spēles kods">
+      <a href="/game#{joinId}">
+        <button>Pievienoties!</button>
+      </a>
+    </div>
   {:else}
     <button>Lūdzu reģistrēties vai pierakstīties!</button>
   {/if}
@@ -56,5 +65,21 @@
     background: #ffffffcc;
     border: none;
     border-radius: 1rem;
+  }
+
+  .join {
+    display: grid;
+    grid-template-columns: 1fr max-content;
+    gap: 0.2rem
+  }
+
+  .join button {
+    height: 100%;
+  }
+
+  .join input {
+    background: #fffc;
+    border: none;
+    border-radius: 0.5rem;
   }
 </style>

@@ -8,10 +8,13 @@
     const game = new Game(3, [], pb);
     let show = false;
 
+    let gameId = ""
+
     let { currentPlayingPlayer, players, board, myPlayerSymbol, isWon } = game;
 
     onMount(async () => {
-        await game.joinGame(location.hash.substring(1));
+        gameId = location.hash.substring(1)
+        await game.joinGame(gameId);
         show = true;
 
         // Pārlādēt lapu ja nomainās spēles ID
@@ -65,6 +68,7 @@
     {:else}
         <div class="section">
             <h1><i class="bi bi-hourglass" /> Gaida spēlētājus...</h1>
+            <h2><code>{gameId}</code></h2>
         </div>
     {/if}
 </div>
@@ -127,5 +131,12 @@
     .win h1 {
         margin: 0;
         text-align: center;
+    }
+
+    h2 {
+        text-align: center;
+        font-size: 2rem;
+        background-color: #fff;
+        border-radius: 2rem;
     }
 </style>
