@@ -33,6 +33,12 @@
             isRegister = false
         }
     }
+
+    userId.subscribe(e => {
+        if(e !== undefined) {
+            location.href = "/"
+        }
+    })
 </script>
 
 <div>
