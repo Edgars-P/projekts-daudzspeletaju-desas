@@ -1,6 +1,7 @@
 import PocketBase from "pocketbase"
 
-import { writable } from "svelte/store";
+import { derived, writable } from "svelte/store";
+import User from "./userClass";
 
 const pb = new PocketBase('https://desasdb.0xff.lv');
 
@@ -8,6 +9,8 @@ export {pb}
 export let userId = writable<string|undefined>(pb.authStore.model?.id)
 export let authError = writable("")
 export let processingLogin = writable(false)
+export let user = derived([userId], (userId) => new User(userId))
+
 
 export async function register(lietotajvards: string, epasts: string, parole: string) {
 
