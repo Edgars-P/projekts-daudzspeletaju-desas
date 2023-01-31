@@ -7,7 +7,6 @@ export class Share {
         return "https://desas.0xff.lv/game/#" + this.spelesID
     }
     public copyLink(){
-        console.log(this)
         const link=this.getLink()
         navigator.clipboard.writeText(link)
     }
