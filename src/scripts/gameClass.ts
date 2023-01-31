@@ -1,6 +1,6 @@
 import { derived, get, writable } from "svelte/store";
 import { checkWin } from "./checkWin";
-import { userId } from "./database";
+import { pb, userId } from "./database";
 
 interface Player {
   user: string;
@@ -170,5 +170,45 @@ export default class TicTacToe {
         expand: "user"
       })).items,
     );
+  }
+}
+
+class User{
+  private gameId:string
+  private playerId:string
+  constructor(gameId:string, playerId:string){
+    this.gameId = gameId
+    this.playerId = playerId
+  }
+  async exists(){
+    //pārbauda vai spēlētājs eksistē
+    try {
+      (await pb.collection("speletaji").getFirstListItem(
+        `user="${(this.playerId)}" && game="${this.gameId}"`,
+      )) 
+      return true
+    } catch (error) {
+      return false
+    }
+  }
+  async join(){
+    // ja lietotājs jau ir pievienojies tad neko nedarīt
+    if (await this.exists()){
+      return true
+    }
+    // ja lietotājs vēl nav pievienots, viņu pievienot
+    const gamerRecord = await pb.collection("speletaji").create({
+      "user": this.playerId,
+      "game": this.gameId,
+      "npk": Math.floor(Math.random() * 10000),
+      "simbols": 'O',
+    })
+    return gamerRecord
+  }
+  getplayerid(){
+    return this.playerId
+  }
+  getgameid(){
+    return this.gameId
   }
 }
