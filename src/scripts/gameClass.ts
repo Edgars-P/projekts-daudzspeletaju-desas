@@ -50,6 +50,15 @@ export default class TicTacToe {
       spelesID = gameRecord.id;
     }
 
+    // Pārbauda vai spēle eksistē
+    try {
+      await this.pb.collection("spele").getOne(spelesID);
+    } catch (error) {
+      // Ja nē, pāradresē uz sākumalpu
+      alert("Atvienots internets vai spēle neeksistē!\nJūs tiksiet pāradresēts.")
+      location.href = "/"
+    }
+
     
     // Dabu spēlē esošos spēlētājus
     this.recordId = spelesID || "";
