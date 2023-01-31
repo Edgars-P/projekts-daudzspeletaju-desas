@@ -22,6 +22,7 @@ export default class User {
         let user = await pb
             .collection("lietotaji")
             .getOne(this.id, { $autoCancel: false })
+            .catch(logout)
 
         // ja lietotājs neeksistē datubāzē, tad atgriež false
         if (!user)

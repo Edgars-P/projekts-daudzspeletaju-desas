@@ -9,7 +9,7 @@ export {pb}
 export let userId = writable<string|undefined>(pb.authStore.model?.id)
 export let authError = writable("")
 export let processingLogin = writable(false)
-export let user = derived([userId], (userId) => new User(userId[0]))
+export let user = derived(userId, (userId) => new User(userId))
 
 
 export async function register(lietotajvards: string, epasts: string, parole: string) {

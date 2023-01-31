@@ -1,15 +1,13 @@
 <script>
   import { userId, pb, logout, user } from "../scripts/database";
 
-  const userStore = $user
-
   async function loadAuth(user) {
     const iuser = await user.getName() 
     return iuser
   }
 </script>
 
-{#await loadAuth(userStore)}
+{#await loadAuth($user)}
   <li><a href="#">Ielādē...</a></li>
 {:then user}
   {#if !user}
