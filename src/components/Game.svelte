@@ -4,6 +4,7 @@
 	import { pb, userId } from "../scripts/database";
 	import { onMount } from "svelte";
 	import { writable } from "svelte/store";
+    import { Share } from "../scripts/shareClass";
 
 	const game = new Game(3, [], pb);
 	let show = false;
@@ -12,8 +13,12 @@
 
 	let { currentPlayingPlayer, players, board, myPlayerSymbol, isWon } = game;
 
+	let shareClass=new Share(gameId) 
+	console.log(shareClass)
+
 	onMount(async () => {
 		gameId = location.hash.substring(1);
+		shareClass=new Share(gameId)
 		await game.joinGame(gameId);
 		show = true;
 
@@ -43,7 +48,6 @@
 			enableEmptyEffect={$myPlayerSymbol == $currentPlayingPlayer &&
 				$isWon === false}
 		/>
-
 		<div class="section players">
 			{#each $players as player}
 				<li>
@@ -62,11 +66,13 @@
 				</li>
 			{/each}
 		</div>
+		<button on:click={()=>shareClass.copyLink()}>Kopēt linku</button>
 	{:else}
 		<div class="section">
 			{#if $userId !== undefined}
 				<h1><i class="bi bi-hourglass" /> Gaida spēlētājus...</h1>
 				<h2><code>{gameId}</code></h2>
+				<button on:click={()=>shareClass.copyLink()}>Kopēt linku</button>
 			{:else}
 				<h1>Lūdzu preslēgties vai reģistrēties!</h1>
 			{/if}
