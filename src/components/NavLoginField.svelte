@@ -2,7 +2,7 @@
   import { userId, pb, logout, user } from "../scripts/database";
 
   async function loadAuth(user) {
-    const iuser = await user.getName() 
+    const iuser = await user.getUser() 
     return iuser
   }
 </script>
@@ -13,7 +13,7 @@
   {#if !user}
     <li><a href="/login">Ienākt vai Reģistrēties</a></li>
   {:else}
-    <li><a href="/profile">{user}</a></li>
+    <li><a href="/profile">{user.username}</a></li>
     {#if user.admin}
       <li>
         <a href="/admin">
