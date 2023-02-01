@@ -50,6 +50,10 @@ export default class TicTacToe {
       spelesID = gameRecord.id;
     }
 
+    if (get(userId) == undefined) {
+      return
+    }
+
     // Pārbauda vai spēle eksistē
     try {
       await this.pb.collection("spele").getOne(spelesID);

@@ -14,7 +14,7 @@
     <li><a href="/login">Ienākt vai Reģistrēties</a></li>
   {:else}
     <li><a href="/profile">{user}</a></li>
-    {#if user}
+    {#if user.admin}
       <li>
         <a href="/admin">
           <i class="bi bi-tools" />
