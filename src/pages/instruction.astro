@@ -3,21 +3,41 @@ import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="Instrukcija">
-    <h2>Lietotāja instrukcija</h2>
-    <p>Dotajā programmā lietotājs var izveidot kontu, izveidot desu spēli kā arī piedalīties esošā spēlē ar spēles kodu.</p>
-    <p>Administrators var redzēt lietotājus, tos izdzēst kā arī apskatīt visas iepriekšējās spēles.</p>
-    <h2>Konta izveide</h2>
-    <p>Lietotājs nospiež pogu “Ienākt vai reģistrēties” lapas labajā stūrī, atveras ielogošanās forma, lietotājs nospiež pogu “Reģistrēties”, aizpilda formu.</p>
-    <h2>Pierakstīšanās</h2>
-    <p>Lietotājs nospiež pogu “Ienākt vai reģistrēties” lapas labajā stūrī, atveras ielogošanās forma, lietotājs ieraksta lietotāja datus un nospiež pogu “Ielogoties”.</p>
-    <h2>Jaunas spēles izveide</h2>
-    <p>Lietotājs nospiežot pogu “Jauna spēle” lapas vidū, atveras uzgaidīšanas lapa. Kurā tu sagaidi savu pretinieku.</p>
-    <h2>Pieslēgšanās esošajai spēlei</h2>
-    <p>Ievadot cita lietotāja spēles kodu laukā "spēles kods", kas atrodas zem pogas "Jauna spēle" un noklikšķinot "Pievienoties", lietotājs tiks pāradresēts uz jaunu lapu kur var piedalīties spēlē.</p>
-    <h2>Apskatīt savas pagātnes spēles</h2>
-    <p>Noklikšķinot savu lietotāja vārdu augšējā labajā stūrī, ir redzamas savas pagātnes spēles kopā ar to datumiem un laikiem.</p>
-    <h2>Administratora lapa</h2>
-    <p>Ja lietotājam ir administratora tiesības, ir redzama vēl viena poga augšējā joslā kas aizved uz administratora lapu.</p>
-    <p>Ir redzams saraksts ar lietotāju vārdiem un e-pastiem, pie katra tiek piedāvāts lietotāju dzēst.</p>
-    <p>Ir redzams saraksts ar visām spēlēm, uzklikšķinot uz spēles administrators var tai pievienoties.</p>
+    <div>
+        <h2>Lietotāja instrukcija</h2>
+        <p>Dotajā programmā lietotājs var izveidot kontu, izveidot desu spēli kā arī piedalīties esošā spēlē ar spēles kodu.</p>
+        <p>Administrators var redzēt lietotājus, tos izdzēst kā arī apskatīt visas iepriekšējās spēles.</p>
+        <h2>Konta izveide</h2>
+        <p>Lietotājs nospiež pogu “Ienākt vai reģistrēties” lapas labajā stūrī, atveras ielogošanās forma, lietotājs nospiež pogu “Reģistrēties”, aizpilda formu.</p>
+        <h2>Pierakstīšanās</h2>
+        <p>Lietotājs nospiež pogu “Ienākt vai reģistrēties” lapas labajā stūrī, atveras ielogošanās forma, lietotājs ieraksta lietotāja datus un nospiež pogu “Ielogoties”.</p>
+        <h2>Jaunas spēles izveide</h2>
+        <p>Lietotājs nospiežot pogu “Jauna spēle” lapas vidū, atveras uzgaidīšanas lapa. Kurā tu sagaidi savu pretinieku.</p>
+        <h2>Pieslēgšanās esošajai spēlei</h2>
+        <p>Ievadot cita lietotāja spēles kodu laukā "spēles kods", kas atrodas zem pogas "Jauna spēle" un noklikšķinot "Pievienoties", lietotājs tiks pāradresēts uz jaunu lapu kur var piedalīties spēlē.</p>
+        <h2>Apskatīt savas pagātnes spēles</h2>
+        <p>Noklikšķinot savu lietotāja vārdu augšējā labajā stūrī, ir redzamas savas pagātnes spēles kopā ar to datumiem un laikiem.</p>
+        <h2>Administratora lapa</h2>
+        <p>Ja lietotājam ir administratora tiesības, ir redzama vēl viena poga augšējā joslā kas aizved uz administratora lapu.</p>
+        <p>Ir redzams saraksts ar lietotāju vārdiem un e-pastiem, pie katra tiek piedāvāts lietotāju dzēst.</p>
+        <p>Ir redzams saraksts ar visām spēlēm, uzklikšķinot uz spēles administrators var tai pievienoties.</p>
+    </div>
+    <br> 
+    <br> 
+    <br> 
 </Layout>
+
+<style>
+    div {
+        width: min(50rem, 80vw);
+        display: block;
+        margin: auto;
+        background: #ffffffbb;
+        padding: 0.5rem;
+        border-radius: 1rem;
+    }
+
+    div p {
+        margin: 0.5rem 0;
+    }
+</style>
